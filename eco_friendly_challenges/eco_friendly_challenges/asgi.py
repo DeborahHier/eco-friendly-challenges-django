@@ -1,5 +1,5 @@
 """
-ASGI config for bird_observations project.
+ASGI config for eco_friendly_challenges project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bird_observations.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'eco_friendly_challenges.settings')
 
 application = get_asgi_application()
