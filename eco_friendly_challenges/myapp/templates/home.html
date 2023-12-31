@@ -8,23 +8,46 @@
         padding: 20px;
     }
     .challenge-title {
-        font-size: 16px;
+        font-size: 115%;
         font-weight: bold;
+        /* float: left; */
+        margin-left: 1%;
     }
     #challenges-list {
         list-style-type: none;
         padding: 0;
     }
-    .challenge {
+    .challenge, .featured-challenge {
         cursor: pointer;
         margin: 10px;
         background-color: #b6c4b6;
         border: 1px solid #575757; /* border: 1px solid #ddd;*/
         padding: 10px;
         box-shadow: #809380 4px 4px;
+        max-width: 600px; /* Control the maximum width */
+        text-align: center;
+    }
+    .featured-challenge {
+        margin: auto;
+    }
+    .mark-completed {
+        background-color: #b6c4b6;
+       /* width: 20%;
+        height: 10%; */
+        border-radius: 15px;
+        box-shadow: #2f4d30 1px 1px;
+        border: #3b5d3c solid 1px;
+        padding: 6px;
+        margin: 12px 3px 3px 3px;
+    }
+    .mark-completed:hover {
+        background-color: #4a6e4e;
+        border-radius: 15px;
+        box-shadow: #839e69 1px 1px 4px;
+        border: #858458 solid 1px;
     }
     .challenge-description {
-        margin-top: 5px;
+        margin-top: 2%;
         color: #555;
        /* display: none;  Initially hidden */
     }
@@ -32,7 +55,7 @@
         text-align: center; /* Center text within each challenge and its title/description */
     }
 
-    h1 {
+    h1, h2 {
         text-align: center;
     }
     .hidden {
@@ -44,13 +67,27 @@
 {% block title %}Home - Eco-Friendly Daily Challenges{% endblock %}
 
 {% block content %}
-    <h1>Eco-Friendly Daily Challenges</h1>
+<h1>Today's Featured Challenge</h1>
+    {% if featured_challenge %}
+        <div class="featured-challenge">
+            <h2>{{ featured_challenge.title }}</h2>
+            <p>{{ featured_challenge.description }}</p>
+            <button class="mark-completed" data-id="{{ challenge.id }}">Mark as Completed</button>
+            <!-- Add more details or a checkmark for logged-in users -->
+        </div>
+    {% else %}
+        <p>No challenges available right now.</p>
+    {% endif %}
+
+    <h2>All Challenges</h2>
+    <!-- <h1>Eco-Friendly Daily Challenges</h1> -->
     <div id="challenges-container">
         <ul id="challenges-list">
             {% for challenge in challenges %}
                 <li class="challenge">
                     <div class="challenge-title">{{ challenge.title }}</div>
                     <div class="challenge-description hidden">{{ challenge.description }}</div>
+                    <button class="mark-completed" data-id="{{ challenge.id }}">Mark as Completed</button>
                 </li>
             {% empty %}
                 <li>No challenges available.</li>
@@ -68,5 +105,42 @@
             });
         });
     });
+      document.querySelectorAll('.mark-completed').forEach(button => {
+            button.addEventListener('click', () => {
+                const challengeId = button.getAttribute('data-id');
+                console.log('Challenge ID:', challengeId);
+                fetch("{% url 'mark_challenge_completed' %}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'), // CSRF token
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ challenge_id: challengeId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data); // Handle the response
+                    if (data.status === 'success') {
+                        // Update UI to reflect completion
+                    }
+                });
+            });
+        });
+
+    // Function to get CSRF token from cookies
+    function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+    }
 </script>
 {% endblock %}

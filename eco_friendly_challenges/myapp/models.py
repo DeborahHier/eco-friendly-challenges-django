@@ -16,3 +16,8 @@ class UserChallenge(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.challenge.title}"
+
+class CompletedChallenge(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE)
+    completed_on = models.DateTimeField(auto_now_add=True)
