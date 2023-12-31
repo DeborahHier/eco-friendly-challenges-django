@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Eco-Friendly Daily Challenges{% endblock %}</title>
+    {% block extra_css %}{% endblock %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #EEF0E5; /* Light background */
+            color: #163020; /* Dark green for text */
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #304D30; /* Dark green background */
+            color: #EEF0E5; /* Light text */
+            padding: 10px 0;
+            text-align: center;
+        }
+        footer {
+            background-color: #B6C4B6; /* Lighter green */
+            color: #163020; /* Dark green text */
+            padding: 10px 0;
+            text-align: center;
+        }
+        a {
+            color: #EEF0E5;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <!-- Navigation Bar (Update as needed) -->
+        <nav>
+            <a href="/">Home</a> |
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'logout' %}">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a> |
+                <a href="{% url 'signup' %}">Sign Up</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        <!-- Content block for child templates -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <!-- Footer content -->
+        &copy; {{ year }} Eco-Friendly Daily Challenges
+    </footer>
+    {% block scripts %}{% endblock %}
+    <!-- Common JavaScript files or scripts here -->
+</body>
+</html>

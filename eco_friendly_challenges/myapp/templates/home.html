@@ -1,41 +1,49 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Eco-Friendly Daily Challenges</title>
-    <style>
-         body {
-            text-align: center;
-            font-family: Arial, sans-serif;
-            background-color: #e9ecef;
-            margin: 0;
-            padding: 0;
-        }
-        #challenges-container {
-            max-width: 600px; /* Set maximum width */
-            margin: auto; /* Center the container */
-            padding: 20px;
-        }
-        #challenges-list {
-            list-style-type: none;
-            padding: 0;
-        }
-        .hidden {
-            display: none;
-        }
-        .challenge {
-            cursor: pointer;
-            margin: 10px;
-            background-color: #f4f4f4;
-            border: 1px solid #ddd;
-            padding: 10px;
-        }
-        .challenge-description {
-            margin-top: 5px;
-            color: #555;
-        }
-    </style>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    #challenges-container {
+        max-width: 600px; /* Set maximum width */
+        margin: auto; /* Center the container */
+        padding: 20px;
+    }
+    .challenge-title {
+        font-size: 16px;
+        font-weight: bold;
+    }
+    #challenges-list {
+        list-style-type: none;
+        padding: 0;
+    }
+    .challenge {
+        cursor: pointer;
+        margin: 10px;
+        background-color: #b6c4b6;
+        border: 1px solid #575757; /* border: 1px solid #ddd;*/
+        padding: 10px;
+        box-shadow: #809380 4px 4px;
+    }
+    .challenge-description {
+        margin-top: 5px;
+        color: #555;
+       /* display: none;  Initially hidden */
+    }
+    .challenge, .challenge-title, .challenge-description {
+        text-align: center; /* Center text within each challenge and its title/description */
+    }
+
+    h1 {
+        text-align: center;
+    }
+    .hidden {
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block title %}Home - Eco-Friendly Daily Challenges{% endblock %}
+
+{% block content %}
     <h1>Eco-Friendly Daily Challenges</h1>
     <div id="challenges-container">
         <ul id="challenges-list">
@@ -49,25 +57,16 @@
             {% endfor %}
         </ul>
     </div>
-    <div>
-        {% if request.user.is_authenticated %}
-            <a href="{% url 'logout' %}">Logout</a>
-        {% else %}
-            <a href="{% url 'login' %}">Login</a>
-        {% endif %}
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.challenge-title').forEach(title => {
-                title.addEventListener('click', () => {
-                    let description = title.nextElementSibling;
-                    description.classList.toggle('hidden');
-                });
+{% endblock %}
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.challenge-title').forEach(title => {
+            title.addEventListener('click', () => {
+                let description = title.nextElementSibling;
+                description.classList.toggle('hidden');
             });
         });
-    </script>
-    
-    
-</body>
-</html>
+    });
+</script>
+{% endblock %}
