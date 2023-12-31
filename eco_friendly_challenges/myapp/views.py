@@ -16,6 +16,7 @@ def home(request):
     #return render(request, 'home.html', {'challenges': challenges})
 
     challenges = list(Challenge.objects.all())
+    completed_challenge_ids = set(CompletedChallenge.objects.filter(user=request.user).values_list('challenge_id', flat=True))
     if challenges:
         featured_challenge = random.choice(challenges)
         challenges.remove(featured_challenge)
@@ -23,13 +24,16 @@ def home(request):
         featured_challenge = None
     return render(request, 'home.html', {
         'featured_challenge': featured_challenge,
-        'challenges': challenges
+        'challenges': challenges,
+        'completed_challenge_ids': completed_challenge_ids,
     })
+
 
 class SignUpView(generic.CreateView):
     form_class = UserCreationForm
     success_url = reverse_lazy('login')  # Redirect to login page after successful registration
     template_name = 'registration/signup.html'  # Path to your signup template
+
 
 @login_required
 def mark_challenge_completed(request):
