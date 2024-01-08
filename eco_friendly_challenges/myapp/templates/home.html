@@ -72,7 +72,11 @@
         <div class="featured-challenge">
             <h2>{{ featured_challenge.title }}</h2>
             <p>{{ featured_challenge.description }}</p>
-            <button class="mark-completed" data-id="{{ featured_challenge.id }}"">Mark as Completed</button>
+            {% if featured_challenge.id in completed_challenge_ids %}
+                <p>Completed ❤️</p>  <!-- Marker for completed challenge -->
+            {% elif user.is_authenticated %}
+                <button class="mark-completed" data-id="{{ featured_challenge.id }}">Mark as Completed</button>
+            {% endif %}
             <!-- Add more details or a checkmark for logged-in users -->
         </div>
     {% else %}
@@ -89,7 +93,7 @@
                     <div class="challenge-description hidden">{{ challenge.description }}</div>
                     {% if challenge.id in completed_challenge_ids %}
                         <p>Completed ❤️</p>  <!-- Marker for completed challenge -->
-                    {% else %}
+                    {% elif user.is_authenticated %}
                         <button class="mark-completed" data-id="{{ challenge.id }}">Mark as Completed</button>
                     {% endif %}
                     

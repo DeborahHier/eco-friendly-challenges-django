@@ -16,7 +16,12 @@ def home(request):
     #return render(request, 'home.html', {'challenges': challenges})
 
     challenges = list(Challenge.objects.all())
-    completed_challenge_ids = set(CompletedChallenge.objects.filter(user=request.user).values_list('challenge_id', flat=True))
+
+    if request.user.is_authenticated:
+        completed_challenge_ids = set(CompletedChallenge.objects.filter(user=request.user).values_list('challenge_id', flat=True))
+    else:
+        completed_challenge_ids = set()
+
     if challenges:
         featured_challenge = random.choice(challenges)
         challenges.remove(featured_challenge)
@@ -39,7 +44,6 @@ class SignUpView(generic.CreateView):
 def mark_challenge_completed(request):
     try:
         if request.method == 'POST':
-            #challenge_id = request.POST.get('challenge_id')
             data = json.loads(request.body)
             challenge_id = int(data.get('challenge_id'))  # Convert to integer
             logging.info(f"Received challenge ID: {challenge_id}")  # Log the received ID
